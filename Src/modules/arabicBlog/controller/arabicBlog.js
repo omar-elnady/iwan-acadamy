@@ -42,8 +42,30 @@ export const createArBlog = asyncHandler(async (req, res, next) => {
 });
 
 export const getArBlogs = asyncHandler(async (req, res, next) => {
-  const blogs = await arBlogModel.find();
-  return res.json({ message: "Done", blogs });
+  const { skip, limit } = paginate(req.query.page, req.query.size);
+  const search = req.query.search || "";
+  const cleanSearch = search.replace(/"/g, "");
+  const regex = new RegExp(cleanSearch, "i");
+  const totalBlogs = await arBlogModel.countDocuments({
+    $or: [
+      { title: { $regex: regex } },
+      { overview: { $regex: regex } },
+      { content: { $regex: regex } },
+    ],
+  });
+  const blogs = await arBlogModel
+    .find({
+      $or: [
+        { title: { $regex: regex } },
+        { overview: { $regex: regex } },
+        { content: { $regex: regex } },
+      ],
+    })
+    .limit(limit)
+    .skip(skip);
+
+  const totalPages = Math.ceil(totalBlogs / limit);
+  return res.json({ message: "Done", blogs, totalPages, totalBlogs });
 });
 
 export const getArBlogByCommonId = asyncHandler(async (req, res) => {
