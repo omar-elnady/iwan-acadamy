@@ -5,7 +5,6 @@ import cors from "cors";
 // Import Routers
 import authRouter from "./modules/auth/auth.router.js";
 import blogs from "./modules/blogs/blogs.router.js";
-import sendEmail from "./modules/sendEmail/sendEmail.rotuer.js";
 import arabicBlogs from "./modules/arabicBlog/arabicBlog.router.js";
 
 const bootstarp = (app, express) => {
@@ -17,7 +16,6 @@ const bootstarp = (app, express) => {
 
   app.use("/api/auth", authRouter);
   app.use("/api/blogs", blogs);
-  app.use("/api/sendemail", sendEmail);
   app.use("/api/arblogs", arabicBlogs);
 
   app.get("*", (req, res, next) => {
