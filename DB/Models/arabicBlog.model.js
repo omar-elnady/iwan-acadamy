@@ -32,6 +32,10 @@ const arBlogSchema = new Schema(
       type: String,
       required: false,
     },
+    lastUpdate: {
+      type: String,
+      required: false,
+    },
     views: {
       type: Number,
       default: 0,
