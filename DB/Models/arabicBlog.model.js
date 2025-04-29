@@ -1,34 +1,44 @@
 import { Schema, model, trusted } from "mongoose";
 
-const arBlogSchema = new Schema({
-    original_title: {
-        type: String,
-        unique: true,
-        required: true,
-    },
+const arBlogSchema = new Schema(
+  {
     title: {
-        type: String,
-        unique: false,
-        required: true
+      type: String,
+      unique: false,
+      required: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+      required: false,
     },
     overview: {
-        type: String,
-        unique: false,
-        required: true
+      type: String,
+      unique: false,
+      required: false,
     },
-    blog_content: {
-        type: String,
-        unique: false,
-        required: false
+    content: {
+      type: String,
+      unique: false,
+      required: false,
     },
-    poster_image: { secure_url: String, public_id: String },
-    main_image: { secure_url: String, public_id: String },
+    image: { secure_url: String, public_id: String },
+    commonId: { type: String, unique: true },
+    isLinked: {
+      type: Boolean,
+      default: false,
+    },
     date: {
-        type: String,
-        unique: false,
-        required: false
-    }
-}, { timestamps: true })
+      type: String,
+      required: false,
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
-const arBlogModel = model('arabicBlog', arBlogSchema)
-export default arBlogModel
+const arBlogModel = model("arabicBlog", arBlogSchema);
+export default arBlogModel;
