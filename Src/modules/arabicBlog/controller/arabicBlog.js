@@ -4,8 +4,54 @@ import cloudinary from "../../../../utils/cloudinary.js";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import enBlogModel from "../../../../DB/Models/englishBlog.model.js";
+import { paginate } from "../../../../utils/paginate.js";
 
 const formatted = dayjs().format("D MMM - YYYY");
+
+export const getArBlogs = asyncHandler(async (req, res, next) => {
+  const { skip, limit } = paginate(req.query.page, req.query.size);
+  const search = req.query.search || "";
+  const cleanSearch = search.replace(/"/g, "");
+  const regex = new RegExp(cleanSearch, "i");
+
+  const totalBlogs = await arBlogModel.countDocuments({
+    $or: [
+      { title: { $regex: regex } },
+      { overview: { $regex: regex } },
+      { content: { $regex: regex } },
+    ],
+  });
+
+  const blogs = await arBlogModel
+    .find({
+      $or: [
+        { title: { $regex: regex } },
+        { overview: { $regex: regex } },
+        { content: { $regex: regex } },
+      ],
+    })
+    .limit(limit)
+    .skip(skip);
+
+  const totalPages = Math.ceil(totalBlogs / limit);
+  return res.json({ message: "Done", blogs, totalPages, totalBlogs });
+});
+
+export const getArBlogByCommonId = asyncHandler(async (req, res) => {
+  const { commonId } = req.params;
+
+  const blog = await arBlogModel.findOneAndUpdate(
+    { commonId },
+    { $inc: { views: 1 } },
+    { new: true }
+  );
+
+  if (!blog) {
+    return next(new Error("Blog not found"));
+  }
+
+  return res.json({ message: "Done", blog });
+});
 
 export const createArBlog = asyncHandler(async (req, res, next) => {
   const { title, overview, content, commonId } = req.body;
@@ -38,49 +84,6 @@ export const createArBlog = asyncHandler(async (req, res, next) => {
     commonId: isEnBlogCommonIdExist ? isEnBlogCommonIdExist.commonId : uuidv4(),
     isLinked: isEnBlogCommonIdExist ? true : false,
   });
-  return res.json({ message: "Done", blog });
-});
-
-export const getArBlogs = asyncHandler(async (req, res, next) => {
-  const { skip, limit } = paginate(req.query.page, req.query.size);
-  const search = req.query.search || "";
-  const cleanSearch = search.replace(/"/g, "");
-  const regex = new RegExp(cleanSearch, "i");
-  const totalBlogs = await arBlogModel.countDocuments({
-    $or: [
-      { title: { $regex: regex } },
-      { overview: { $regex: regex } },
-      { content: { $regex: regex } },
-    ],
-  });
-  const blogs = await arBlogModel
-    .find({
-      $or: [
-        { title: { $regex: regex } },
-        { overview: { $regex: regex } },
-        { content: { $regex: regex } },
-      ],
-    })
-    .limit(limit)
-    .skip(skip);
-
-  const totalPages = Math.ceil(totalBlogs / limit);
-  return res.json({ message: "Done", blogs, totalPages, totalBlogs });
-});
-
-export const getArBlogByCommonId = asyncHandler(async (req, res) => {
-  const { commonId } = req.params;
-
-  const blog = await arBlogModel.findOneAndUpdate(
-    { commonId },
-    { $inc: { views: 1 } },
-    { new: true }
-  );
-
-  if (!blog) {
-    return next(new Error("Blog not found"));
-  }
-
   return res.json({ message: "Done", blog });
 });
 

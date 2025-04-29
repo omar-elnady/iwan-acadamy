@@ -7,14 +7,15 @@ import {
 } from "../../../utils/multer.cloudinary.js";
 const router = Router();
 
+router.get("/", auth, arabicBlog.getArBlogs);
+router.get("/:commonId", arabicBlog.getArBlogByCommonId);
+
 router.post(
-  "/sendblog",
+  "/",
   auth,
   fileUplode(fileVaildation.image).single("image"),
   arabicBlog.createArBlog
 );
-router.get("/getblog/:commonId", arabicBlog.getArBlogByCommonId);
-router.get("/getblogs", auth, arabicBlog.getArBlogs);
 router.put(
   "/:id",
   auth,
