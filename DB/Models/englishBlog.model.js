@@ -36,6 +36,10 @@ const enBlogSchema = new Schema(
       type: Number,
       default: 0,
     },
+    language: {
+      type: String,
+      default: "en",
+    }
   },
   { timestamps: true }
 );

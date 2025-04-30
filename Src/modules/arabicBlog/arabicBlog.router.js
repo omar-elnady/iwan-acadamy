@@ -7,7 +7,7 @@ import {
 } from "../../../utils/multer.cloudinary.js";
 const router = Router();
 
-router.get("/", auth, arabicBlog.getArBlogs);
+router.get("/",  arabicBlog.getArBlogs);
 router.get("/:commonId", arabicBlog.getArBlogByCommonId);
 
 router.post(

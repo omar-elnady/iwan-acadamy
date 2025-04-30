@@ -6,6 +6,7 @@ import cors from "cors";
 import authRouter from "./modules/auth/auth.router.js";
 import blogs from "./modules/blogs/blogs.router.js";
 import arabicBlogs from "./modules/arabicBlog/arabicBlog.router.js";
+import englishBlogs from "./modules/englishBlog/englishBlog.router.js";
 
 const bootstarp = (app, express) => {
   app.use(cors());
@@ -17,6 +18,7 @@ const bootstarp = (app, express) => {
   app.use("/api/auth", authRouter);
   app.use("/api/blogs", blogs);
   app.use("/api/arblogs", arabicBlogs);
+  app.use("/api/enBlogs", englishBlogs);
 
   app.get("*", (req, res, next) => {
     res.json({ message: "invalid routing " });

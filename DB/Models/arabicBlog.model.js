@@ -40,6 +40,10 @@ const arBlogSchema = new Schema(
       type: Number,
       default: 0,
     },
+    language: {
+      type: String,
+      default: "ar",
+    }
   },
   { timestamps: true }
 );

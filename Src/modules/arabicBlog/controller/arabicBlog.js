@@ -18,7 +18,7 @@ export const getArBlogs = asyncHandler(async (req, res, next) => {
     $or: [
       { title: { $regex: regex } },
       { overview: { $regex: regex } },
-      { content: { $regex: regex } },
+      
     ],
   });
 
@@ -27,7 +27,7 @@ export const getArBlogs = asyncHandler(async (req, res, next) => {
       $or: [
         { title: { $regex: regex } },
         { overview: { $regex: regex } },
-        { content: { $regex: regex } },
+        
       ],
     })
     .limit(limit)
@@ -37,7 +37,7 @@ export const getArBlogs = asyncHandler(async (req, res, next) => {
   return res.json({ message: "Blogs retrieved successfully", blogs, totalPages, totalBlogs });
 });
 
-export const getArBlogByCommonId = asyncHandler(async (req, res) => {
+export const getArBlogByCommonId = asyncHandler(async (req, res , next) => {
   const { commonId } = req.params;
 
   const blog = await arBlogModel.findOneAndUpdate(
@@ -69,7 +69,7 @@ export const createArBlog = asyncHandler(async (req, res, next) => {
   if (file) {
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       file.path,
-      { folder: `blogs/${titleSlug}` }
+      { folder: `blogs/ar/${titleSlug}` }
     );
     image = { secure_url, public_id };
   }
@@ -83,6 +83,7 @@ export const createArBlog = asyncHandler(async (req, res, next) => {
     date: formatted,
     commonId: isEnBlogCommonIdExist ? isEnBlogCommonIdExist.commonId : uuidv4(),
     isLinked: isEnBlogCommonIdExist ? true : false,
+    language: "ar",
   });
   return res.json({ message: "Blog created successfully", blog });
 });
@@ -109,7 +110,7 @@ export const updateArBlog = asyncHandler(async (req, res, next) => {
     await cloudinary.uploader.destroy(isBlogExist.image.public_id);
     const { secure_url, public_id } = await cloudinary.uploader.upload(
       image.path,
-      { folder: `blogs/${titleSlug}` }
+      { folder: `blogs/ar/${titleSlug}` }
     );
     newImage = { secure_url, public_id };
   }
