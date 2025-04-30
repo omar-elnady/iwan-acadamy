@@ -34,7 +34,7 @@ export const getArBlogs = asyncHandler(async (req, res, next) => {
     .skip(skip);
 
   const totalPages = Math.ceil(totalBlogs / limit);
-  return res.json({ message: "Done", blogs, totalPages, totalBlogs });
+  return res.json({ message: "Blogs retrieved successfully", blogs, totalPages, totalBlogs });
 });
 
 export const getArBlogByCommonId = asyncHandler(async (req, res) => {
@@ -50,7 +50,7 @@ export const getArBlogByCommonId = asyncHandler(async (req, res) => {
     return next(new Error("Blog not found"));
   }
 
-  return res.json({ message: "Done", blog });
+  return res.json({ message: "Blog retrieved successfully", blog });
 });
 
 export const createArBlog = asyncHandler(async (req, res, next) => {
@@ -84,7 +84,7 @@ export const createArBlog = asyncHandler(async (req, res, next) => {
     commonId: isEnBlogCommonIdExist ? isEnBlogCommonIdExist.commonId : uuidv4(),
     isLinked: isEnBlogCommonIdExist ? true : false,
   });
-  return res.json({ message: "Done", blog });
+  return res.json({ message: "Blog created successfully", blog });
 });
 
 export const updateArBlog = asyncHandler(async (req, res, next) => {
@@ -129,7 +129,7 @@ export const updateArBlog = asyncHandler(async (req, res, next) => {
     },
     { new: true }
   );
-  return res.json({ message: "Done", blog });
+  return res.json({ message: "Blog updated successfully", blog });
 });
 
 export const deleteArBlog = asyncHandler(async (req, res, next) => {
