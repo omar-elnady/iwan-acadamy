@@ -4,7 +4,6 @@ import cors from "cors";
 
 // Import Routers
 import authRouter from "./modules/auth/auth.router.js";
-import blogs from "./modules/blogs/blogs.router.js";
 import arabicBlogs from "./modules/arabicBlog/arabicBlog.router.js";
 import englishBlogs from "./modules/englishBlog/englishBlog.router.js";
 
