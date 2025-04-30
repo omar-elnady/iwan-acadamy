@@ -16,7 +16,6 @@ const bootstarp = (app, express) => {
   connection();
 
   app.use("/api/auth", authRouter);
-  app.use("/api/blogs", blogs);
   app.use("/api/arblogs", arabicBlogs);
   app.use("/api/enBlogs", englishBlogs);
 
